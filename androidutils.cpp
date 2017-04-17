@@ -1,19 +1,27 @@
 #include "androidutils.h"
 #include <QtGlobal>
-
+#include <QQmlEngine>
 #ifdef Q_OS_ANDROID
-#include <AndroidNative/systemdispatcher.h>
 #include <QtAndroidExtras>
-
-JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
-	Q_UNUSED(vm);
-
-	// It must call this function within JNI_OnLoad to enable System Dispatcher
-	AndroidNative::SystemDispatcher::registerNatives();
-
-	return JNI_VERSION_1_6;
-}
 #endif
+
+static void registerInQml();
+static QObject *createQmlSingleton(QQmlEngine *qmlEngine, QJSEngine *jsEngine);
+
+Q_COREAPP_STARTUP_FUNCTION(registerInQml)
+
+AndroidUtils *AndroidUtils::_instance = nullptr;
+
+AndroidUtils::AndroidUtils(QObject *parent) :
+	QObject(parent)
+{}
+
+AndroidUtils *AndroidUtils::instance()
+{
+	if(!_instance)
+		_instance = new AndroidUtils(qApp);
+	return _instance;
+}
 
 void AndroidUtils::setStatusBarColor(const QColor &color)
 {
@@ -66,19 +74,53 @@ void AndroidUtils::showToast(const QString &message, bool showLong)
 #endif
 }
 
-void AndroidUtils::hapticFeedback()
+void AndroidUtils::hapticFeedback(HapticFeedbackConstant constant)
 {
 #ifdef Q_OS_ANDROID
 	QtAndroid::runOnAndroidThread([=](){
 		const auto android_R_id_content = QAndroidJniObject::getStaticField<jint>("android/R$id", "content");
-		const auto LONG_PRESS = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "LONG_PRESS");
+		jint type = 0;
+		switch (constant) {
+		case AndroidUtils::LongPress:
+			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "LONG_PRESS");
+			break;
+		case AndroidUtils::VirtualKey:
+			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "VIRTUAL_KEY");
+			break;
+		case AndroidUtils::KeyboardTap:
+			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "KEYBOARD_TAP");
+			break;
+		case AndroidUtils::ClockTick:
+			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "CLOCK_TICK");
+			break;
+		case AndroidUtils::ContextClick:
+			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "CONTEXT_CLICK");
+			break;
+		default:
+			Q_UNREACHABLE();
+			return;
+		}
+
 		auto activity = QtAndroid::androidActivity();
 		auto view = activity.callObjectMethod("findViewById",
 											  "(I)Landroid/view/View;",
 											  android_R_id_content);
 		view.callMethod<jboolean>("performHapticFeedback",
 								  "(I)Z",
-								  LONG_PRESS);
+								  type);
 	});
 #endif
+}
+
+static void registerInQml()
+{
+	qmlRegisterSingletonType<AndroidUtils>("de.skycoder42.androidutils", 1, 0, "AndroidUtils", createQmlSingleton);
+	//qmlProtectModule("de.skycoder42.quickextras", 1);
+}
+
+static QObject *createQmlSingleton(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
+{
+	Q_UNUSED(qmlEngine)
+	Q_UNUSED(jsEngine)
+	return new AndroidUtils(qmlEngine);
 }

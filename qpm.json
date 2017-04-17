@@ -14,9 +14,7 @@
     "revision": "",
     "fingerprint": ""
   },
-  "dependencies": [
-    "android.native.pri@0.0.4"
-  ],
+  "dependencies": [],
   "license": "BSD_3_CLAUSE",
   "pri_filename": "de_skycoder42_androidutils.pri",
   "webpage": "https://github.com/Skycoder42/AndroidUtils"

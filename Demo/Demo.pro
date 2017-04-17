@@ -2,7 +2,6 @@ QT += qml quick
 
 CONFIG += c++11
 
-include(../vendor/vendor.pri)
 include(../de_skycoder42_androidutils.pri)
 
 SOURCES += main.cpp
