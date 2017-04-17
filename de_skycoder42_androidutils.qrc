@@ -1,0 +1,6 @@
+
+<RCC>
+    <qresource prefix="/de/skycoder42/androidutils">
+        <file>qmldir</file>
+    </qresource>
+</RCC>
