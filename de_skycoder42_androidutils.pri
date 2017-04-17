@@ -15,7 +15,7 @@ DISTFILES += \
 	$$PWD/android/androidutils.gradle \
 	$$PWD/android/src/de/skycoder42/androidutils/AlarmReceiver.java
 
-copygradle.commands = $(COPY) $$PWD/android/androidutils.gradle $$OUT_PWD/android-build
+copygradle.commands = mkdir -p $$OUT_PWD/android-build && $(COPY) $$PWD/android/androidutils.gradle $$OUT_PWD/android-build
 setupgradle.commands = echo 'setAndroidUtilsPath\\(\\\"$$PWD/android/src\\\"\\)' >> $$OUT_PWD/android-build/androidutils.gradle
 
 setupgradle.depends = copygradle

@@ -15,8 +15,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 		startWakefulService(context, serviceIntent);
 	}
 
-	static public void scheduleAutoCheck(Context context, boolean autoCheck) {
+	static public void scheduleAutoCheck(Context context, boolean autoCheck, String serviceClass) {
 		Intent intent = new Intent(context, AlarmReceiver.class);
+		Class classType = Class.forName(serviceClass);
+		intent
+
 		PendingIntent pending = PendingIntent.getBroadcast(context,
 			ALARM_INTENT_ID,
 			intent,
