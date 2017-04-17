@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
+import de.skycoder42.androidutils 1.0
 
 ApplicationWindow {
 	visible: true
@@ -8,30 +9,41 @@ ApplicationWindow {
 	height: 480
 	title: qsTr("Hello World")
 
-	SwipeView {
-		id: swipeView
+	Page {
 		anchors.fill: parent
-		currentIndex: tabBar.currentIndex
-
-		Page1 {
-		}
-
-		Page {
-			Label {
-				text: qsTr("Second page")
+		Pane {
+			anchors.fill: parent
+			ColumnLayout {
 				anchors.centerIn: parent
-			}
-		}
-	}
 
-	footer: TabBar {
-		id: tabBar
-		currentIndex: swipeView.currentIndex
-		TabButton {
-			text: qsTr("First")
-		}
-		TabButton {
-			text: qsTr("Second")
+				TextField {
+					id: color
+					placeholderText: "Enter a hex color value"
+					inputMask: "\\#HHHHHH"
+					text: "#ABCDEF"
+				}
+				Button {
+					id: changeButton
+					text: "Change color"
+					onClicked: AndroidUtils.setStatusBarColor(color.text)
+				}
+
+				CheckBox {
+					id: longBox
+					text: "Long toast"
+				}
+				Button {
+					id: toastButton
+					text: "Show Toast"
+					onClicked: AndroidUtils.showToast("This is a toast", longBox.checked)
+				}
+
+				Button {
+					id: longButton
+					text: "Press me long!"
+					onPressAndHold: AndroidUtils.hapticFeedback(AndroidUtils.LongPress)
+				}
+			}
 		}
 	}
 }
