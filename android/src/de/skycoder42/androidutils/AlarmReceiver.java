@@ -4,21 +4,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.app.PendingIntent;
 import android.app.AlarmManager;
+import android.util.Log;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
+	private static final String TAG = "de.skycoder42.androidutils.AlarmReceiver";
 	private static final int ALARM_INTENT_ID = 20;
+	private static final String CLASS_NAME_EXTRA = "de.skycoder42.androidutils.classname";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Intent serviceIntent = new Intent(context, SeasonProxerService.class);
-		startWakefulService(context, serviceIntent);
+		try {
+			Class classType = Class.forName(intent.getStringExtra(CLASS_NAME_EXTRA));
+			Intent serviceIntent = new Intent(context, classType);
+			startWakefulService(context, serviceIntent);
+		} catch(ClassNotFoundException e) {
+			Log.e(TAG, e.getMessage());
+		}
 	}
 
 	static public void scheduleAutoCheck(Context context, boolean autoCheck, String serviceClass) {
 		Intent intent = new Intent(context, AlarmReceiver.class);
-		Class classType = Class.forName(serviceClass);
-		intent
+		intent.putExtra(CLASS_NAME_EXTRA, serviceClass);
 
 		PendingIntent pending = PendingIntent.getBroadcast(context,
 			ALARM_INTENT_ID,
