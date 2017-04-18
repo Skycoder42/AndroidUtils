@@ -14,7 +14,7 @@ INCLUDEPATH += $$PWD
 DISTFILES += \
 	$$PWD/android/androidutils.gradle \
 	$$PWD/android/src/de/skycoder42/androidutils/AlarmReceiver.java \
-    $$PWD/android/src/de/skycoder42/androidutils/AndroidUtils.java
+	$$PWD/android/src/de/skycoder42/androidutils/AndroidUtils.java
 
 android {
 	isEmpty(QPM_ROOT):QPM_ROOT = $$_PRO_FILE_PWD_/vendor
@@ -29,3 +29,5 @@ android {
 	export(first.depends)
 	QMAKE_EXTRA_TARGETS += first copygradle setupnative setupgradle
 }
+
+noJniOnLoad: DEFINES += NO_JNI_ONLOAD

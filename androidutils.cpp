@@ -9,14 +9,11 @@
 #include <QDebug>
 #endif
 
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) && !defined(NO_JNI_ONLOAD)
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
 	Q_UNUSED(vm);
-	qDebug("NativeInterface::JNI_OnLoad()");
-
 	// It must call this function within JNI_OnLoad to enable System Dispatcher
 	AndroidNative::SystemDispatcher::registerNatives();
-
 	return JNI_VERSION_1_6;
 }
 #endif
