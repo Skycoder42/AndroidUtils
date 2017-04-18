@@ -13,7 +13,8 @@ INCLUDEPATH += $$PWD
 
 DISTFILES += \
 	$$PWD/android/androidutils.gradle \
-	$$PWD/android/src/de/skycoder42/androidutils/AlarmReceiver.java
+	$$PWD/android/src/de/skycoder42/androidutils/AlarmReceiver.java \
+    $$PWD/android/src/de/skycoder42/androidutils/AndroidUtils.java
 
 android {
 	isEmpty(QPM_ROOT):QPM_ROOT = $$_PRO_FILE_PWD_/vendor

@@ -20,6 +20,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 			startWakefulService(context, serviceIntent);
 		} catch(ClassNotFoundException e) {
 			Log.e(TAG, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

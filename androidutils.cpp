@@ -2,6 +2,7 @@
 #include <QtGlobal>
 #include <QQmlEngine>
 #include <QCoreApplication>
+#include <AndroidNative/systemdispatcher.h>
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras>
 #else
@@ -9,8 +10,6 @@
 #endif
 
 #ifdef Q_OS_ANDROID
-#include <AndroidNative/systemdispatcher.h>
-
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
 	Q_UNUSED(vm);
 	qDebug("NativeInterface::JNI_OnLoad()");
@@ -22,10 +21,10 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
 }
 #endif
 
-static void registerInQml();
+static void setupUtils();
 static QObject *createQmlSingleton(QQmlEngine *qmlEngine, QJSEngine *jsEngine);
 
-Q_COREAPP_STARTUP_FUNCTION(registerInQml)
+Q_COREAPP_STARTUP_FUNCTION(setupUtils)
 
 AndroidUtils *AndroidUtils::_instance = nullptr;
 
@@ -73,18 +72,10 @@ void AndroidUtils::setStatusBarColor(const QColor &color)
 void AndroidUtils::showToast(const QString &message, bool showLong)
 {
 #ifdef Q_OS_ANDROID
-	QtAndroid::runOnAndroidThread([=](){
-		auto context = QtAndroid::androidContext();
-		const auto LENGTH_LONG = QAndroidJniObject::getStaticField<jint>("android/widget/Toast", "LENGTH_LONG");
-		const auto LENGTH_SHORT = QAndroidJniObject::getStaticField<jint>("android/widget/Toast", "LENGTH_SHORT");
-		auto toast = QAndroidJniObject::callStaticObjectMethod("android/widget/Toast",
-															   "makeText",
-															   "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-															   context.object(),
-															   QAndroidJniObject::fromString(message).object(),
-															   showLong ? LENGTH_LONG : LENGTH_SHORT);
-		toast.callMethod<void>("show");
-	});
+	AndroidNative::SystemDispatcher::instance()->dispatch("androidnative.Toast.showToast", {
+															  {"text", message},
+															  {"longLength", showLong}
+														  });
 #else
 	Q_UNUSED(showLong)
 	qInfo() << message;
@@ -94,8 +85,6 @@ void AndroidUtils::showToast(const QString &message, bool showLong)
 void AndroidUtils::hapticFeedback(HapticFeedbackConstant constant)
 {
 #ifdef Q_OS_ANDROID
-	QtAndroid::runOnAndroidThread([=](){
-		const auto android_R_id_content = QAndroidJniObject::getStaticField<jint>("android/R$id", "content");
 		jint type = 0;
 		switch (constant) {
 		case AndroidUtils::LongPress:
@@ -118,21 +107,19 @@ void AndroidUtils::hapticFeedback(HapticFeedbackConstant constant)
 			return;
 		}
 
-		auto activity = QtAndroid::androidActivity();
-		auto view = activity.callObjectMethod("findViewById",
-											  "(I)Landroid/view/View;",
-											  android_R_id_content);
-		view.callMethod<jboolean>("performHapticFeedback",
-								  "(I)Z",
-								  type);
-	});
+		AndroidNative::SystemDispatcher::instance()->dispatch("AndroidUtils.hapticFeedback", {
+																 {"feedbackConstant", (int)type}
+															 });
 #else
 	Q_UNUSED(constant);
 #endif
 }
 
-static void registerInQml()
+static void setupUtils()
 {
+	AndroidNative::SystemDispatcher::instance()->loadClass("androidnative.Toast");
+	AndroidNative::SystemDispatcher::instance()->loadClass("de.skycoder42.androidutils.AndroidUtils");
+
 	qmlRegisterSingletonType<AndroidUtils>("de.skycoder42.androidutils", 1, 0, "AndroidUtils", createQmlSingleton);
 	//qmlProtectModule("de.skycoder42.quickextras", 1);
 }

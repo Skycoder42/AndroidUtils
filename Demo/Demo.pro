@@ -2,6 +2,8 @@ QT += qml quick
 
 CONFIG += c++11
 
+TARGET = AndroidUtilsDemo
+
 include(../vendor/vendor.pri)
 QPM_ROOT = $$_PRO_FILE_PWD_/../vendor
 include(../de_skycoder42_androidutils.pri)
