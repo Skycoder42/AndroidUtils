@@ -42,28 +42,9 @@ AndroidUtils *AndroidUtils::instance()
 void AndroidUtils::setStatusBarColor(const QColor &color)
 {
 #ifdef Q_OS_ANDROID
-	if(QtAndroid::androidSdkVersion() >= 21) {
-		QtAndroid::runOnAndroidThreadSync([=](){
-			auto activity = QtAndroid::androidActivity();
-			if(activity.isValid()) {
-				const auto FLAG_TRANSLUCENT_STATUS = QAndroidJniObject::getStaticField<jint>("android/view/WindowManager$LayoutParams",
-																							 "FLAG_TRANSLUCENT_STATUS");
-				const auto FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = QAndroidJniObject::getStaticField<jint>("android/view/WindowManager$LayoutParams",
-																									   "FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS");
-				const auto aColor = QAndroidJniObject::callStaticMethod<jint>("android/graphics/Color",
-																			  "parseColor",
-																			  "(Ljava/lang/String;)I",
-																			  QAndroidJniObject::fromString(color.name()).object());
-
-				QAndroidJniObject window = activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
-				if(window.isValid()) {
-					window.callMethod<void>("clearFlags", "(I)V", FLAG_TRANSLUCENT_STATUS);
-					window.callMethod<void>("addFlags", "(I)V", FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-					window.callMethod<void>("setStatusBarColor", "(I)V", aColor);
-				}
-			}
-		});
-	}
+	AndroidNative::SystemDispatcher::instance()->dispatch("AndroidUtils.setStatusBarColor", {
+															 {"color", color.name()}
+														 });
 #else
 	Q_UNUSED(color);
 #endif
@@ -85,30 +66,8 @@ void AndroidUtils::showToast(const QString &message, bool showLong)
 void AndroidUtils::hapticFeedback(HapticFeedbackConstant constant)
 {
 #ifdef Q_OS_ANDROID
-		jint type = 0;
-		switch (constant) {
-		case AndroidUtils::LongPress:
-			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "LONG_PRESS");
-			break;
-		case AndroidUtils::VirtualKey:
-			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "VIRTUAL_KEY");
-			break;
-		case AndroidUtils::KeyboardTap:
-			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "KEYBOARD_TAP");
-			break;
-		case AndroidUtils::ClockTick:
-			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "CLOCK_TICK");
-			break;
-		case AndroidUtils::ContextClick:
-			type = QAndroidJniObject::getStaticField<jint>("android/view/HapticFeedbackConstants", "CONTEXT_CLICK");
-			break;
-		default:
-			Q_UNREACHABLE();
-			return;
-		}
-
 		AndroidNative::SystemDispatcher::instance()->dispatch("AndroidUtils.hapticFeedback", {
-																 {"feedbackConstant", (int)type}
+																 {"feedbackConstant", (int)constant}
 															 });
 #else
 	Q_UNUSED(constant);

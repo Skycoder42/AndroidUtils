@@ -11,11 +11,11 @@ class AndroidUtils : public QObject
 
 public:
 	enum HapticFeedbackConstant {
-		LongPress,
-		VirtualKey,
-		KeyboardTap,
-		ClockTick,
-		ContextClick
+		LongPress = 0,
+		VirtualKey = 1,
+		KeyboardTap = 3,
+		ClockTick = 4,
+		ContextClick = 6
 	};
 	Q_ENUM(HapticFeedbackConstant)
 
