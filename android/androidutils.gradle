@@ -2,35 +2,16 @@
 // androidPackageSourceDir is the absolute path of the folder containing build.gradle and AndroidManifests.xml
 // This code also works with androiddeployqt.
 
-import groovy.json.JsonSlurper
-
 dependencies {
 	compile "com.android.support:support-core-utils:+"
 }
 
-String getAndroidPackageSourceDir() {
-	String res = System.getProperty("user.dir");
-
-	FileTree tree = fileTree(dir: res + "/..").include("android*deployment-settings.json");
-
-	if (tree.getFiles().size() > 0) {
-		def inputFile =  tree.getFiles().toArray()[0];
-		def InputJSON = new JsonSlurper().parseText(inputFile.text);
-		res = InputJSON["android-package-source-directory"]
-	} else {
-		println("android*deployment-settings.json not found. Set user.dir be the androidPackageSourceDir");
-	}
-
-	return res;
-}
-
-String setAndroidUtilsPath(String path) {
-	String androidPackageSourceDir = getAndroidPackageSourceDir();
+String addAndroidUtilsPath(String path) {
 	LinkedHashSet hash = android.sourceSets.main.java.srcDirs;
 	hash.add(path);
 	android.sourceSets.main.java.srcDirs = hash;
 }
 
 ext {
-	setAndroidUtilsPath = this.&setAndroidUtilsPath;
+	addAndroidUtilsPath = this.&addAndroidUtilsPath;
 }

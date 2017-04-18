@@ -1,8 +1,25 @@
 #include "androidutils.h"
 #include <QtGlobal>
 #include <QQmlEngine>
+#include <QCoreApplication>
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras>
+#else
+#include <QDebug>
+#endif
+
+#ifdef Q_OS_ANDROID
+#include <AndroidNative/systemdispatcher.h>
+
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
+	Q_UNUSED(vm);
+	qDebug("NativeInterface::JNI_OnLoad()");
+
+	// It must call this function within JNI_OnLoad to enable System Dispatcher
+	AndroidNative::SystemDispatcher::registerNatives();
+
+	return JNI_VERSION_1_6;
+}
 #endif
 
 static void registerInQml();
@@ -109,6 +126,8 @@ void AndroidUtils::hapticFeedback(HapticFeedbackConstant constant)
 								  "(I)Z",
 								  type);
 	});
+#else
+	Q_UNUSED(constant);
 #endif
 }
 
