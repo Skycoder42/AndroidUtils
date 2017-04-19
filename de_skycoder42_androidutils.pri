@@ -18,17 +18,21 @@ DISTFILES += \
 
 android {
 	isEmpty(QPM_ROOT): QPM_ROOT = $$_PRO_FILE_PWD_/vendor
-	isEmpty(BUILD_ROOT): BUILD_ROOT = $$OUT_PWD
 
-	copygradle.commands = mkdir -p $$BUILD_ROOT/android-build && $(COPY) $$PWD/android/androidutils.gradle $$BUILD_ROOT/android-build
-	setupnative.commands = echo 'addAndroidUtilsPath\\(\\\"$$QPM_ROOT/android/native/pri/java/src/\\\"\\)' >> $$BUILD_ROOT/android-build/androidutils.gradle
-	setupgradle.commands = echo 'addAndroidUtilsPath\\(\\\"$$PWD/android/src\\\"\\)' >> $$BUILD_ROOT/android-build/androidutils.gradle
+	copygradle.path = /
+	copygradle.files = $$PWD/android/androidutils.gradle
 
-	setupnative.depends = copygradle
-	setupgradle.depends = setupnative
-	first.depends = $(first) setupgradle
-	export(first.depends)
-	QMAKE_EXTRA_TARGETS += first copygradle setupnative setupgradle
+	setupnative.path = /
+	setupnative.files =
+	setupnative.commands = echo 'addAndroidUtilsPath\\(\\\"$$QPM_ROOT/android/native/pri/java/src/\\\"\\)' >> $(INSTALL_ROOT)/androidutils.gradle
+	setupnative.depends = install_copygradle
+
+	setupgradle.path = /
+	setupgradle.files =
+	setupgradle.commands = echo 'addAndroidUtilsPath\\(\\\"$$PWD/android/src\\\"\\)' >> $(INSTALL_ROOT)/androidutils.gradle
+	setupgradle.depends = install_copygradle
+
+	INSTALLS += copygradle setupnative setupgradle
 }
 
 noJniOnLoad: DEFINES += NO_JNI_ONLOAD

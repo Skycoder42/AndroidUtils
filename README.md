@@ -38,6 +38,3 @@ In that case, make shure you initialize androidnative.pri by adding `AndroidNati
 
 ### QPM_ROOT
 This variable should contain the root directory of qpm, i.e. the `vendor` directory. By default (if you don't set the variable), it is set to `$$_PRO_FILE_PWD_/vendor`. If your qpm vendor folder is not located in the same directory as your pro file, set this variable to the **absolute** path of your vendor folder. If you use the `_PRO_FILE_PWD_`, you can simply make the path relative to this directory, e.g. `QPM_ROOT = $$_PRO_FILE_PWD_/../vendor`.
-
-### BUILD_ROOT
-If the project with the android code is part of a subdirs project, i.e. **not** the root project, you need to set `BUILD_PATH` as well. It needs to point to the root build directory. By default this is `OUT_PWD`. If your project is a subdirectory, adjust that path to match the build root. Assuming your android project is a sub project of the root project, you have to set it to: `BUILD_ROOT = $$OUT_PWD/..`
