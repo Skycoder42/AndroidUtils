@@ -17,11 +17,12 @@ DISTFILES += \
 	$$PWD/android/src/de/skycoder42/androidutils/AndroidUtils.java
 
 android {
-	isEmpty(QPM_ROOT):QPM_ROOT = $$_PRO_FILE_PWD_/vendor
+	isEmpty(QPM_ROOT): QPM_ROOT = $$_PRO_FILE_PWD_/vendor
+	isEmpty(BUILD_ROOT): BUILD_ROOT = $$OUT_PWD
 
-	copygradle.commands = mkdir -p $$OUT_PWD/android-build && $(COPY) $$PWD/android/androidutils.gradle $$OUT_PWD/android-build
-	setupnative.commands = echo 'addAndroidUtilsPath\\(\\\"$$QPM_ROOT/android/native/pri/java/src/\\\"\\)' >> $$OUT_PWD/android-build/androidutils.gradle
-	setupgradle.commands = echo 'addAndroidUtilsPath\\(\\\"$$PWD/android/src\\\"\\)' >> $$OUT_PWD/android-build/androidutils.gradle
+	copygradle.commands = mkdir -p $$BUILD_ROOT/android-build && $(COPY) $$PWD/android/androidutils.gradle $$BUILD_ROOT/android-build
+	setupnative.commands = echo 'addAndroidUtilsPath\\(\\\"$$QPM_ROOT/android/native/pri/java/src/\\\"\\)' >> $$BUILD_ROOT/android-build/androidutils.gradle
+	setupgradle.commands = echo 'addAndroidUtilsPath\\(\\\"$$PWD/android/src\\\"\\)' >> $$BUILD_ROOT/android-build/androidutils.gradle
 
 	setupnative.depends = copygradle
 	setupgradle.depends = setupnative
