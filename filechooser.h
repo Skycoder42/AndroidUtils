@@ -26,7 +26,7 @@ public:
 	enum ChooserFlag {
 		OpenableFlag = 0x01,
 		LocalOnlyFlag = 0x02,
-		AllowMultipleFlag = 0x04
+		AlwaysGrantWrite = 0x04
 	};
 	Q_DECLARE_FLAGS(ChooserFlags, ChooserFlag)
 	Q_FLAG(ChooserFlags)

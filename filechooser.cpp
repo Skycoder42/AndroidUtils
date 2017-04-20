@@ -7,7 +7,7 @@ FileChooser::FileChooser(QObject *parent) :
 	QObject(parent),
 	_title(),
 	_contentUrl(),
-	_type(GetContent),
+	_type(OpenDocument),
 	_mimeType(QStringLiteral("*/*")),
 	_flags(OpenableFlag)
 {
@@ -104,7 +104,7 @@ void FileChooser::open()
 			{"mime", _mimeType},
 			{"openable", _flags.testFlag(OpenableFlag)},
 			{"localOnly", _flags.testFlag(LocalOnlyFlag)},
-			{"allowMultiple", _flags.testFlag(AllowMultipleFlag)}
+			{"grantWrite", _flags.testFlag(AlwaysGrantWrite)}
 		};
 		break;
 	case FileChooser::OpenDocument:
@@ -114,7 +114,7 @@ void FileChooser::open()
 			{"mime", _mimeType},
 			{"url", _contentUrl.toString()},
 			{"openable", _flags.testFlag(OpenableFlag)},
-			{"allowMultiple", _flags.testFlag(AllowMultipleFlag)}
+			{"grantWrite", _flags.testFlag(AlwaysGrantWrite)}
 		};
 		break;
 	case FileChooser::CreateDocument:

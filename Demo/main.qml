@@ -110,6 +110,19 @@ ApplicationWindow {
 						text: "Open file chooser"
 						onClicked: chooser.open()
 					}
+
+					Button {
+						id: editButton
+						text: "Display/Edit File"
+
+						Opener {
+							id: opener
+
+							onDataLoaded: console.log(data)
+						}
+
+						onClicked: opener.openFile(chooser.contentUrl)
+					}
 				}
 			}
 		}

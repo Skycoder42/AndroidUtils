@@ -8,7 +8,8 @@ include(../vendor/vendor.pri)
 QPM_ROOT = $$_PRO_FILE_PWD_/../vendor
 include(../de_skycoder42_androidutils.pri)
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    opener.cpp
 
 RESOURCES += qml.qrc
 
@@ -40,3 +41,6 @@ DISTFILES += \
 	android/build.gradle
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+HEADERS += \
+    opener.h
