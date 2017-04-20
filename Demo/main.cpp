@@ -2,7 +2,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QDebug>
+#ifdef Q_OS_ANDROID
 #include <contentdevice.h>
+#endif
 
 int main(int argc, char *argv[])
 {
