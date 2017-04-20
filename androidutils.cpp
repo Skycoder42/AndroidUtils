@@ -25,6 +25,27 @@ Q_COREAPP_STARTUP_FUNCTION(setupUtils)
 
 AndroidUtils *AndroidUtils::_instance = nullptr;
 
+void AndroidUtils::javaThrow()
+{
+#ifdef Q_OS_ANDROID
+	QAndroidJniEnvironment env;
+	if (env->ExceptionCheck()) {
+		auto exception = QAndroidJniObject::fromLocalRef(env->ExceptionOccurred());
+		JavaException exc;
+		exc._what = exception.callObjectMethod("getLocalizedMessage", "()Ljava/lang/String;").toString().toUtf8();
+
+		QAndroidJniObject stringWriter("java/io/StringWriter");
+		QAndroidJniObject printWriter("java/io/PrintWriter", "(Ljava/lang/Writer;)V", stringWriter.object());
+		exception.callMethod<void>("printStackTrace", "(Ljava/lang/PrintWriter;)V", printWriter.object());
+		exc._stackTrace = stringWriter.callObjectMethod("toString", "()Ljava/lang/String;").toString().toUtf8();
+
+		env->ExceptionClear();
+
+		throw exc;
+	}
+#endif
+}
+
 AndroidUtils::AndroidUtils(QObject *parent) :
 	QObject(parent)
 {}
@@ -85,4 +106,34 @@ static QObject *createQmlSingleton(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
 	Q_UNUSED(qmlEngine)
 	Q_UNUSED(jsEngine)
 	return new AndroidUtils(qmlEngine);
+}
+
+
+
+JavaException::JavaException() :
+	_what(),
+	_stackTrace()
+{}
+
+const char *JavaException::what() const noexcept
+{
+	return _what.constData();
+}
+
+const QByteArray JavaException::printStackTrace() const noexcept
+{
+	return _stackTrace;
+}
+
+void JavaException::raise() const
+{
+	throw *this;
+}
+
+QException *JavaException::clone() const
+{
+	auto e = new JavaException();
+	e->_what = _what;
+	e->_stackTrace = _stackTrace;
+	return e;
 }

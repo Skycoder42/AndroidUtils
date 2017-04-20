@@ -4,6 +4,24 @@
 #include <QObject>
 #include <QString>
 #include <QColor>
+#include <QException>
+
+class JavaException : public QException
+{
+	friend class AndroidUtils;
+public:
+	JavaException();
+
+	const char *what() const noexcept override;
+	const QByteArray printStackTrace() const noexcept;
+
+	void raise() const override;
+	QException *clone() const override;
+
+private:
+	QByteArray _what;
+	QByteArray _stackTrace;
+};
 
 class AndroidUtils : public QObject
 {
@@ -18,6 +36,8 @@ public:
 		ContextClick = 6
 	};
 	Q_ENUM(HapticFeedbackConstant)
+
+	static void javaThrow();
 
 	AndroidUtils(QObject *parent = nullptr);
 	static AndroidUtils *instance();

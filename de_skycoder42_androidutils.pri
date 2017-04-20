@@ -5,7 +5,6 @@ HEADERS += \
 
 SOURCES += \
 	$$PWD/androidutils.cpp
-
 RESOURCES += \
 	$$PWD/de_skycoder42_androidutils.qrc
 
@@ -17,6 +16,9 @@ DISTFILES += \
 	$$PWD/android/src/de/skycoder42/androidutils/AndroidUtils.java
 
 android {
+	HEADERS += $$PWD/contentdevice.h
+	SOURCES += $$PWD/contentdevice.cpp
+
 	isEmpty(QPM_ROOT): QPM_ROOT = $$_PRO_FILE_PWD_/vendor
 
 	copygradle.path = /
