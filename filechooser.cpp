@@ -1,8 +1,11 @@
 #include "filechooser.h"
 #include <AndroidNative/systemdispatcher.h>
 
+const QString FileChooser::ContentChoosenMessage = QStringLiteral("AndroidUtils.FileChooser.contentChoosen");
+
 FileChooser::FileChooser(QObject *parent) :
 	QObject(parent),
+	_title(),
 	_contentUrl(),
 	_type(GetContent),
 	_mimeType(QStringLiteral("*/*")),
@@ -10,6 +13,14 @@ FileChooser::FileChooser(QObject *parent) :
 {
 	auto dispatcher = AndroidNative::SystemDispatcher::instance();
 	dispatcher->loadClass(QStringLiteral("de.skycoder42.androidutils.FileChooser"));
+	connect(dispatcher, &AndroidNative::SystemDispatcher::dispatched,
+			this, &FileChooser::onDispatched,
+			Qt::QueuedConnection);
+}
+
+QString FileChooser::title() const
+{
+	return _title;
 }
 
 QUrl FileChooser::contentUrl() const
@@ -68,6 +79,18 @@ void FileChooser::setFlags(ChooserFlags flags)
 	emit flagsChanged(flags);
 }
 
+void FileChooser::onDispatched(const QString &message, const QVariantMap &data)
+{
+	if(message == ContentChoosenMessage) {
+		if(data.value(QStringLiteral("success"), false).toBool()) {
+			_contentUrl = data.value(QStringLiteral("uri")).toString();
+			emit contentUrlChanged(_contentUrl);
+			emit accepted();
+		} else
+			emit rejected();
+	}
+}
+
 void FileChooser::open()
 {
 	QString message;
@@ -77,6 +100,7 @@ void FileChooser::open()
 	case FileChooser::GetContent:
 		message = QStringLiteral("AndroidUtils.FileChooser.getContent");
 		data = {
+			{"title", _title.isEmpty() ? tr("Open File") : _title},
 			{"mime", _mimeType},
 			{"openable", _flags.testFlag(OpenableFlag)},
 			{"localOnly", _flags.testFlag(LocalOnlyFlag)},
@@ -86,6 +110,7 @@ void FileChooser::open()
 	case FileChooser::OpenDocument:
 		message = QStringLiteral("AndroidUtils.FileChooser.openDocument");
 		data = {
+			{"title", _title.isEmpty() ? tr("Open File") : _title},
 			{"mime", _mimeType},
 			{"url", _contentUrl.toString()},
 			{"openable", _flags.testFlag(OpenableFlag)},
@@ -95,9 +120,10 @@ void FileChooser::open()
 	case FileChooser::CreateDocument:
 		message = QStringLiteral("AndroidUtils.FileChooser.createDocument");
 		data = {
+			{"title", _title.isEmpty() ? tr("Save File") : _title},
 			{"mime", _mimeType},
 			{"url", _contentUrl.toString()},
-			{"title", _contentUrl.fileName()},
+			{"name", _contentUrl.fileName()},
 			{"openable", _flags.testFlag(OpenableFlag)}
 		};
 		break;
@@ -107,4 +133,13 @@ void FileChooser::open()
 	}
 
 	AndroidNative::SystemDispatcher::instance()->dispatch(message, data);
+}
+
+void FileChooser::setTitle(QString title)
+{
+	if (_title == title)
+		return;
+
+	_title = title;
+	emit titleChanged(title);
 }

@@ -8,6 +8,8 @@ class FileChooser : public QObject
 {
 	Q_OBJECT
 
+	Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+
 	Q_PROPERTY(QUrl contentUrl READ contentUrl WRITE setContentUrl NOTIFY contentUrlChanged)
 	Q_PROPERTY(ChooserType type READ type WRITE setType NOTIFY typeChanged)
 	Q_PROPERTY(QString mimeType READ mimeType WRITE setMimeType NOTIFY mimeTypeChanged)
@@ -31,6 +33,7 @@ public:
 
 	explicit FileChooser(QObject *parent = nullptr);
 
+	QString title() const;
 	QUrl contentUrl() const;
 	ChooserType type() const;
 	QString mimeType() const;
@@ -39,6 +42,7 @@ public:
 public slots:
 	void open();
 
+	void setTitle(QString title);
 	void setContentUrl(QUrl contentUrl);
 	void setType(ChooserType type);
 	void setMimeType(QString mimeType);
@@ -48,12 +52,19 @@ signals:
 	void accepted();
 	void rejected();
 
+	void titleChanged(QString title);
 	void contentUrlChanged(QUrl contentUrl);
 	void typeChanged(ChooserType type);
 	void mimeTypeChanged(QString mimeType);
 	void flagsChanged(ChooserFlags flags);
 
+private slots:
+	void onDispatched(const QString &message, const QVariantMap &data);
+
 private:
+	static const QString ContentChoosenMessage;
+
+	QString _title;
 	QUrl _contentUrl;
 	ChooserType _type;
 	QString _mimeType;

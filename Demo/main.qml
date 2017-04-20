@@ -11,6 +11,11 @@ ApplicationWindow {
 
 	FileChooser {
 		id: chooser
+
+		type: modeBox.model.get(modeBox.currentIndex).value
+
+		onAccepted: AndroidUtils.showToast("File choosen: " + chooser.contentUrl, true)
+		onRejected: AndroidUtils.showToast("file choosing aborted!")
 	}
 
 	footer: TabBar {
@@ -74,8 +79,34 @@ ApplicationWindow {
 				ColumnLayout {
 					anchors.centerIn: parent
 
+					TextField {
+						id: contentField
+						text: chooser.contentUrl
+
+						Layout.fillWidth: true
+
+						onEditingFinished: chooser.contentUrl = contentField.text
+					}
+
+					ComboBox {
+						id: modeBox
+						textRole: "key"
+
+						Layout.minimumWidth: 200
+						Layout.fillWidth: true
+
+						model: ListModel {
+							ListElement { key: "GetContent"; value: FileChooser.GetContent }
+							ListElement { key: "OpenDocument"; value: FileChooser.OpenDocument }
+							ListElement { key: "CreateDocument"; value: FileChooser.CreateDocument }
+						}
+
+						currentIndex: 0
+					}
+
 					Button {
 						id: chooserButton
+						Layout.fillWidth: true
 						text: "Open file chooser"
 						onClicked: chooser.open()
 					}
