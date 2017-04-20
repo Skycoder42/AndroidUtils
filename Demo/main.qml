@@ -9,39 +9,76 @@ ApplicationWindow {
 	height: 480
 	title: qsTr("Hello World")
 
+	FileChooser {
+		id: chooser
+	}
+
+	footer: TabBar {
+		id: tabBar
+		currentIndex: swipeView.currentIndex
+
+		TabButton {
+			id: btn0
+			text: "Utils"
+		}
+
+		TabButton {
+			id: btn1
+			text: "File Chooser"
+		}
+	}
+
 	Page {
 		anchors.fill: parent
-		Pane {
+
+		SwipeView {
+			id: swipeView
 			anchors.fill: parent
-			ColumnLayout {
-				anchors.centerIn: parent
+			currentIndex: tabBar.currentIndex
 
-				TextField {
-					id: color
-					placeholderText: "Enter a hex color value"
-					inputMask: "\\#HHHHHH"
-					text: "#ABCDEF"
-				}
-				Button {
-					id: changeButton
-					text: "Change color"
-					onClicked: AndroidUtils.setStatusBarColor(color.text)
-				}
+			Pane {
+				ColumnLayout {
+					anchors.centerIn: parent
 
-				CheckBox {
-					id: longBox
-					text: "Long toast"
-				}
-				Button {
-					id: toastButton
-					text: "Show Toast"
-					onClicked: AndroidUtils.showToast("This is a toast", longBox.checked)
-				}
+					TextField {
+						id: color
+						placeholderText: "Enter a hex color value"
+						inputMask: "\\#HHHHHH"
+						text: "#ABCDEF"
+					}
+					Button {
+						id: changeButton
+						text: "Change color"
+						onClicked: AndroidUtils.setStatusBarColor(color.text)
+					}
 
-				Button {
-					id: longButton
-					text: "Press me long!"
-					onPressAndHold: AndroidUtils.hapticFeedback(AndroidUtils.LongPress)
+					CheckBox {
+						id: longBox
+						text: "Long toast"
+					}
+					Button {
+						id: toastButton
+						text: "Show Toast"
+						onClicked: AndroidUtils.showToast("This is a toast", longBox.checked)
+					}
+
+					Button {
+						id: longButton
+						text: "Press me long!"
+						onPressAndHold: AndroidUtils.hapticFeedback(AndroidUtils.LongPress)
+					}
+				}
+			}
+
+			Pane {
+				ColumnLayout {
+					anchors.centerIn: parent
+
+					Button {
+						id: chooserButton
+						text: "Open file chooser"
+						onClicked: chooser.open()
+					}
 				}
 			}
 		}

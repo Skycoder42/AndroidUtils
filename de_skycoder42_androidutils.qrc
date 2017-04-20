@@ -1,6 +1,7 @@
-
 <RCC>
-    <qresource prefix="/de/skycoder42/androidutils">
+    <qresource prefix="/qt-project.org/imports/de/skycoder42/androidutils">
         <file>qmldir</file>
+        <file>FileDialog.qml</file>
+        <file alias="+android/FileDialog.qml">AndroidFileDialog.qml</file>
     </qresource>
 </RCC>

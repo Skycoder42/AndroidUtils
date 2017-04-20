@@ -8,6 +8,7 @@
 #else
 #include <QDebug>
 #endif
+#include "filechooser.h"
 
 #if defined(Q_OS_ANDROID) && !defined(NO_JNI_ONLOAD)
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
@@ -98,6 +99,7 @@ static void setupUtils()
 	AndroidNative::SystemDispatcher::instance()->loadClass("de.skycoder42.androidutils.AndroidUtils");
 
 	qmlRegisterSingletonType<AndroidUtils>("de.skycoder42.androidutils", 1, 0, "AndroidUtils", createQmlSingleton);
+	qmlRegisterType<FileChooser>("de.skycoder42.androidutils", 1, 0, "FileChooser");
 	//qmlProtectModule("de.skycoder42.quickextras", 1);
 }
 
