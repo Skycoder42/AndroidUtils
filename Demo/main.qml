@@ -9,15 +9,6 @@ ApplicationWindow {
 	height: 480
 	title: qsTr("Hello World")
 
-	FileChooser {
-		id: chooser
-
-		type: modeBox.model.get(modeBox.currentIndex).value
-
-		onAccepted: AndroidUtils.showToast("File choosen: " + chooser.contentUrl, true)
-		onRejected: AndroidUtils.showToast("file choosing aborted!")
-	}
-
 	footer: TabBar {
 		id: tabBar
 		currentIndex: swipeView.currentIndex
@@ -76,14 +67,31 @@ ApplicationWindow {
 			}
 
 			Pane {
-				ColumnLayout {
-					anchors.centerIn: parent
+				FileChooser {
+					id: chooser
+
+					type: modeBox.model.get(modeBox.currentIndex).value
+
+					onAccepted: AndroidUtils.showToast("File choosen: " + chooser.contentUrl, true)
+					onRejected: AndroidUtils.showToast("file choosing aborted!")
+				}
+
+				Opener {
+					id: opener
+
+					onDataLoaded: editField.text = data
+				}
+
+				GridLayout {
+					anchors.fill: parent
+					columns: 3
 
 					TextField {
 						id: contentField
 						text: chooser.contentUrl
 
 						Layout.fillWidth: true
+						Layout.columnSpan: 3
 
 						onEditingFinished: chooser.contentUrl = contentField.text
 					}
@@ -92,8 +100,8 @@ ApplicationWindow {
 						id: modeBox
 						textRole: "key"
 
-						Layout.minimumWidth: 200
 						Layout.fillWidth: true
+						Layout.columnSpan: 3
 
 						model: ListModel {
 							ListElement { key: "GetContent"; value: FileChooser.GetContent }
@@ -113,15 +121,25 @@ ApplicationWindow {
 
 					Button {
 						id: editButton
+						Layout.fillWidth: true
 						text: "Display/Edit File"
 
-						Opener {
-							id: opener
-
-							onDataLoaded: console.log(data)
-						}
-
 						onClicked: opener.openFile(chooser.contentUrl)
+					}
+
+					Button {
+						id: saveButton
+						Layout.fillWidth: true
+						text: "Save File"
+
+						onClicked: opener.saveFile(chooser.contentUrl, editField.text)
+					}
+
+					TextArea {
+						id: editField
+						Layout.fillHeight: true
+						Layout.fillWidth: true
+						Layout.columnSpan: 3
 					}
 				}
 			}

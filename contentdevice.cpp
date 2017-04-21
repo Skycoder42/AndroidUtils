@@ -49,16 +49,14 @@ bool ContentDevice::open(QIODevice::OpenMode mode)
 															 "parse",
 															 "(Ljava/lang/String;)Landroid/net/Uri;",
 															 QAndroidJniObject::fromString(_url.toString(QUrl::FullyEncoded)).object());
-		if(!uri.isValid()) {
-			AndroidUtils::javaThrow();
+		AndroidUtils::javaThrow();
+		if(!uri.isValid())
 			return false;
-		}
 
 		auto contentResolver = _context.callObjectMethod("getContentResolver", "()Landroid/content/ContentResolver;");
-		if(!contentResolver.isValid()) {
-			AndroidUtils::javaThrow();
+		AndroidUtils::javaThrow();
+		if(!contentResolver.isValid())
 			return false;
-		}
 
 		switch(mode) {
 		case QIODevice::ReadOnly:
@@ -77,10 +75,9 @@ bool ContentDevice::open(QIODevice::OpenMode mode)
 			return false;
 		}
 
-		if(!_stream.isValid()) {
-			AndroidUtils::javaThrow();
+		AndroidUtils::javaThrow();
+		if(!_stream.isValid())
 			return false;
-		}
 
 		return true;
 	} catch(QException &e) {

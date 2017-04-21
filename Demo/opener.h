@@ -2,6 +2,7 @@
 #define OPENER_H
 
 #include <QObject>
+#include <QUrl>
 
 class Opener : public QObject
 {
