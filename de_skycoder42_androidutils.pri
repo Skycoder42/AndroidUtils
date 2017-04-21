@@ -2,11 +2,11 @@ android: QT *= androidextras
 
 HEADERS += \
 	$$PWD/androidutils.h \
-    $$PWD/filechooser.h
+	$$PWD/filechooser.h
 
 SOURCES += \
 	$$PWD/androidutils.cpp \
-    $$PWD/filechooser.cpp
+	$$PWD/filechooser.cpp
 RESOURCES += \
 	$$PWD/de_skycoder42_androidutils.qrc
 
@@ -16,7 +16,7 @@ DISTFILES += \
 	$$PWD/android/androidutils.gradle \
 	$$PWD/android/src/de/skycoder42/androidutils/AlarmReceiver.java \
 	$$PWD/android/src/de/skycoder42/androidutils/AndroidUtils.java \
-    $$PWD/android/src/de/skycoder42/androidutils/FileChooser.java
+	$$PWD/android/src/de/skycoder42/androidutils/FileChooser.java
 
 android {
 	HEADERS += $$PWD/contentdevice.h

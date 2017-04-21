@@ -38,7 +38,7 @@ QString FileChooser::mimeType() const
 	return _mimeType;
 }
 
-FileChooser::ChooserFlags FileChooser::flags() const
+FileChooser::ChooserFlags FileChooser::chooserFlags() const
 {
 	return _flags;
 }
@@ -70,13 +70,13 @@ void FileChooser::setMimeType(QString mimeType)
 	emit mimeTypeChanged(mimeType);
 }
 
-void FileChooser::setFlags(ChooserFlags flags)
+void FileChooser::setChooserFlags(ChooserFlags chooserFlags)
 {
-	if (_flags == flags)
+	if (_flags == chooserFlags)
 		return;
 
-	_flags = flags;
-	emit flagsChanged(flags);
+	_flags = chooserFlags;
+	emit chooserFlagsChanged(chooserFlags);
 }
 
 void FileChooser::onDispatched(const QString &message, const QVariantMap &data)

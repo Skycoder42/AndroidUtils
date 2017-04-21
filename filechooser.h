@@ -13,7 +13,7 @@ class FileChooser : public QObject
 	Q_PROPERTY(QUrl contentUrl READ contentUrl WRITE setContentUrl NOTIFY contentUrlChanged)
 	Q_PROPERTY(ChooserType type READ type WRITE setType NOTIFY typeChanged)
 	Q_PROPERTY(QString mimeType READ mimeType WRITE setMimeType NOTIFY mimeTypeChanged)
-	Q_PROPERTY(ChooserFlags flags READ flags WRITE setFlags NOTIFY flagsChanged)
+	Q_PROPERTY(ChooserFlags chooserFlags READ chooserFlags WRITE setChooserFlags NOTIFY chooserFlagsChanged)
 
 public:
 	enum ChooserType {
@@ -38,7 +38,7 @@ public:
 	QUrl contentUrl() const;
 	ChooserType type() const;
 	QString mimeType() const;
-	ChooserFlags flags() const;
+	ChooserFlags chooserFlags() const;
 
 public slots:
 	void open();
@@ -47,7 +47,7 @@ public slots:
 	void setContentUrl(QUrl contentUrl);
 	void setType(ChooserType type);
 	void setMimeType(QString mimeType);
-	void setFlags(ChooserFlags flags);
+	void setChooserFlags(ChooserFlags chooserFlags);
 
 signals:
 	void accepted();
@@ -57,7 +57,7 @@ signals:
 	void contentUrlChanged(QUrl contentUrl);
 	void typeChanged(ChooserType type);
 	void mimeTypeChanged(QString mimeType);
-	void flagsChanged(ChooserFlags flags);
+	void chooserFlagsChanged(ChooserFlags chooserFlags);
 
 private slots:
 	void onDispatched(const QString &message, const QVariantMap &data);

@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import de.skycoder42.androidutils 1.0
+import Qt.labs.platform 1.0 as Labs//fix because of file tree
 
 ApplicationWindow {
 	visible: true
@@ -67,7 +68,7 @@ ApplicationWindow {
 			}
 
 			Pane {
-				FileChooser {
+				FileDialog {
 					id: chooser
 
 					type: modeBox.model.get(modeBox.currentIndex).value

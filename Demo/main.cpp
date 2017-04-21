@@ -1,5 +1,5 @@
 #include <QFile>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QDebug>
 #include "opener.h"
@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-	QGuiApplication app(argc, argv);
+	QApplication app(argc, argv);
 
 	qmlRegisterType<Opener>("de.skycoder42.androidutils", 1, 0, "Opener");
 

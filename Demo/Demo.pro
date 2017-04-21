@@ -1,4 +1,4 @@
-QT += qml quick
+QT += qml quick widgets
 
 CONFIG += c++11
 
@@ -9,7 +9,7 @@ QPM_ROOT = $$_PRO_FILE_PWD_/../vendor
 include(../de_skycoder42_androidutils.pri)
 
 SOURCES += main.cpp \
-    opener.cpp
+	opener.cpp
 
 RESOURCES += qml.qrc
 
@@ -43,4 +43,4 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 HEADERS += \
-    opener.h
+	opener.h
