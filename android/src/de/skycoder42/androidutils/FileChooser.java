@@ -2,7 +2,6 @@ package de.skycoder42.androidutils;
 
 import java.util.Map;
 import java.util.HashMap;
-import android.util.Log;
 import android.net.Uri;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +12,7 @@ import androidnative.SystemDispatcher;
 
 public class FileChooser {
 	public static final int CHOOSE_CONTENT_ACTION = 0x1091c657;
-	public static final int CHOOSE_DOCUMENT_ACTION = 0x1091c658;
+	public static final int CHOOSE_PERSISTENT_ACTION = 0x1091c658;
 
 	public static final String GET_CONTENT_MESSAGE = "AndroidUtils.FileChooser.getContent";
 	public static final String OPEN_DOCUMENT_MESSAGE = "AndroidUtils.FileChooser.openDocument";
@@ -34,13 +33,15 @@ public class FileChooser {
 								 (String)message.get("mime"),
 								 (String)message.get("url"),
 								 (Boolean)message.get("openable"),
-								 (Boolean)message.get("grantWrite"));
+								 (Boolean)message.get("grantWrite"),
+								 (Boolean)message.get("persistPermissions"));
 				} else if (type.equals(CREATE_DOCUMENT_MESSAGE)) {
 					createDocument((String)message.get("title"),
 								   (String)message.get("mime"),
 								   (String)message.get("url"),
 								   (String)message.get("name"),
-								   (Boolean)message.get("openable"));
+								   (Boolean)message.get("openable"),
+								   (Boolean)message.get("persistPermissions"));
 				} else if (type.equals(SystemDispatcher.ACTIVITY_RESULT_MESSAGE)) {
 					onActivityResult((Integer)message.get("requestCode"),
 									 (Integer)message.get("resultCode"),
@@ -73,7 +74,7 @@ public class FileChooser {
 		activity.runOnUiThread(runnable);
 	}
 
-	static private void openDocument(final String title, String mime, String url, boolean openable, boolean grantWrite) {
+	static private void openDocument(final String title, String mime, String url, boolean openable, boolean grantWrite, final boolean persistPermissions) {
 		final Activity activity = QtNative.activity();
 
 		final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -92,13 +93,13 @@ public class FileChooser {
 			public void run() {
 				activity.startActivityForResult(
 					Intent.createChooser(intent, title),
-					CHOOSE_DOCUMENT_ACTION);
+					persistPermissions ? CHOOSE_PERSISTENT_ACTION : CHOOSE_CONTENT_ACTION);
 			};
 		};
 		activity.runOnUiThread(runnable);
 	}
 
-	static private void createDocument(final String title, String mime, String url, String name, boolean openable) {
+	static private void createDocument(final String title, String mime, String url, String name, boolean openable, final boolean persistPermissions) {
 		final Activity activity = QtNative.activity();
 
 		final Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -118,7 +119,7 @@ public class FileChooser {
 			public void run() {
 				activity.startActivityForResult(
 					Intent.createChooser(intent, title),
-					CHOOSE_DOCUMENT_ACTION);
+					persistPermissions ? CHOOSE_PERSISTENT_ACTION : CHOOSE_CONTENT_ACTION);
 			};
 		};
 		activity.runOnUiThread(runnable);
@@ -126,17 +127,16 @@ public class FileChooser {
 
 	static private void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == CHOOSE_CONTENT_ACTION ||
-		   requestCode == CHOOSE_DOCUMENT_ACTION) {
+		   requestCode == CHOOSE_PERSISTENT_ACTION) {
 			Map reply = new HashMap();
 			if (resultCode == Activity.RESULT_OK) {
 				Uri uri = data.getData();
 
-				if(requestCode == CHOOSE_DOCUMENT_ACTION) {
-					Activity activity = QtNative.activity();
+				if(requestCode == CHOOSE_PERSISTENT_ACTION) {
 					int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-					activity.grantUriPermission(activity.getPackageName(), uri, takeFlags);
-					ContentResolver resolver = activity.getContentResolver();
-					resolver.takePersistableUriPermission(uri, takeFlags);
+					QtNative.activity()
+						.getContentResolver()
+						.takePersistableUriPermission(uri, takeFlags);
 				}
 
 				reply.put("uri", uri.toString());

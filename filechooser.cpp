@@ -104,7 +104,7 @@ void FileChooser::open()
 			{"mime", _mimeType},
 			{"openable", _flags.testFlag(OpenableFlag)},
 			{"localOnly", _flags.testFlag(LocalOnlyFlag)},
-			{"grantWrite", _flags.testFlag(AlwaysGrantWrite)}
+			{"grantWrite", _flags.testFlag(AlwaysGrantWriteFlag)}
 		};
 		break;
 	case FileChooser::OpenDocument:
@@ -114,7 +114,8 @@ void FileChooser::open()
 			{"mime", _mimeType},
 			{"url", _contentUrl.toString()},
 			{"openable", _flags.testFlag(OpenableFlag)},
-			{"grantWrite", _flags.testFlag(AlwaysGrantWrite)}
+			{"grantWrite", _flags.testFlag(AlwaysGrantWriteFlag)},
+			{"persistPermissions", _flags.testFlag(PersistPermissionsFlag)}
 		};
 		break;
 	case FileChooser::CreateDocument:
@@ -124,7 +125,8 @@ void FileChooser::open()
 			{"mime", _mimeType},
 			{"url", _contentUrl.toString()},
 			{"name", _contentUrl.fileName()},
-			{"openable", _flags.testFlag(OpenableFlag)}
+			{"openable", _flags.testFlag(OpenableFlag)},
+			{"persistPermissions", _flags.testFlag(PersistPermissionsFlag)}
 		};
 		break;
 	default:

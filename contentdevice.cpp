@@ -48,7 +48,7 @@ bool ContentDevice::open(QIODevice::OpenMode mode)
 		auto uri = QAndroidJniObject::callStaticObjectMethod("android/net/Uri",
 															 "parse",
 															 "(Ljava/lang/String;)Landroid/net/Uri;",
-															 QAndroidJniObject::fromString(_url.toString()).object());
+															 QAndroidJniObject::fromString(_url.toString(QUrl::FullyEncoded)).object());
 		if(!uri.isValid()) {
 			AndroidUtils::javaThrow();
 			return false;
