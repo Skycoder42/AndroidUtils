@@ -5,6 +5,7 @@
 #include "opener.h"
 #ifdef Q_OS_ANDROID
 #include <contentdevice.h>
+#include <sharedpreferences.h>
 #endif
 
 int main(int argc, char *argv[])
@@ -29,6 +30,14 @@ int main(int argc, char *argv[])
 		device.close();
 	} else
 		qCritical() << "ContentDevice:" << device.errorString();
+
+	auto prefs = SharedPreferences::getPreferences();
+	QObject::connect(prefs, &SharedPreferences::loaded, prefs, [prefs](){
+		qDebug() << "init state" << prefs->data();
+		prefs->setValue("test1", "test2");
+		prefs->setValue("test2", 42);
+		prefs->remove("test2");
+	});
 #endif
 
 	QQmlApplicationEngine engine;

@@ -11,13 +11,13 @@ import org.qtproject.qt5.android.QtNative;
 import androidnative.SystemDispatcher;
 
 public class FileChooser {
-	public static final int CHOOSE_CONTENT_ACTION = 0x1091c657;
-	public static final int CHOOSE_PERSISTENT_ACTION = 0x1091c658;
+	private static final int CHOOSE_CONTENT_ACTION = 0x1091c657;
+	private static final int CHOOSE_PERSISTENT_ACTION = 0x1091c658;
 
-	public static final String GET_CONTENT_MESSAGE = "AndroidUtils.FileChooser.getContent";
-	public static final String OPEN_DOCUMENT_MESSAGE = "AndroidUtils.FileChooser.openDocument";
-	public static final String CREATE_DOCUMENT_MESSAGE = "AndroidUtils.FileChooser.createDocument";
-	public static final String CONTENT_CHOOSEN_MESSAGE = "AndroidUtils.FileChooser.contentChoosen";
+	private static final String GET_CONTENT_MESSAGE = "AndroidUtils.FileChooser.getContent";
+	private static final String OPEN_DOCUMENT_MESSAGE = "AndroidUtils.FileChooser.openDocument";
+	private static final String CREATE_DOCUMENT_MESSAGE = "AndroidUtils.FileChooser.createDocument";
+	private static final String CONTENT_CHOOSEN_MESSAGE = "AndroidUtils.FileChooser.contentChoosen";
 
 	static {
 		SystemDispatcher.addListener(new SystemDispatcher.Listener() {

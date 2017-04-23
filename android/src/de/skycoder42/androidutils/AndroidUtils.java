@@ -21,8 +21,8 @@ public class AndroidUtils {
 
 				if (name.equals("AndroidUtils.hapticFeedback"))
 					AndroidUtils.hapticFeedback((Integer)data.get("feedbackConstant"));
-					if (name.equals("AndroidUtils.setStatusBarColor"))
-						AndroidUtils.setStatusBarColor((String)data.get("color"));
+				else if (name.equals("AndroidUtils.setStatusBarColor"))
+					AndroidUtils.setStatusBarColor((String)data.get("color"));
 			}
 		});
 	}
