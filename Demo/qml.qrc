@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>UtilsTab.qml</file>
+        <file>ContentTab.qml</file>
+        <file>PreferenceTab.qml</file>
     </qresource>
 </RCC>

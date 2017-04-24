@@ -71,6 +71,7 @@ void SharedPreferences::setValue(const QString &key, const QVariant &value)
 															  {QStringLiteral("key"), key},
 															  {QStringLiteral("value"), value}
 														  });
+	emit changed(key, value);
 }
 
 void SharedPreferences::remove(const QString &key)
@@ -80,6 +81,7 @@ void SharedPreferences::remove(const QString &key)
 															  {QStringLiteral("id"), _id},
 															  {QStringLiteral("key"), key}
 														  });
+	emit changed(key, QVariant());
 }
 
 void SharedPreferences::dispatched(const QString &message, const QVariantMap &data)

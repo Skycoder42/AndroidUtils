@@ -9,7 +9,8 @@ QPM_ROOT = $$_PRO_FILE_PWD_/../vendor
 include(../de_skycoder42_androidutils.pri)
 
 SOURCES += main.cpp \
-	opener.cpp
+	opener.cpp \
+    prefmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -43,4 +44,5 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 HEADERS += \
-	opener.h
+	opener.h \
+    prefmodel.h
