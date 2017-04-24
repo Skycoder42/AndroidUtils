@@ -95,6 +95,8 @@ void SharedPreferences::dispatched(const QString &message, const QVariantMap &da
 			_data.insert(key, value);
 			emit changed(key, value);
 		}
-	} else if(message == QStringLiteral("AndroidUtils.PrefHelper.loaded.") + _id)
+	} else if(message == QStringLiteral("AndroidUtils.PrefHelper.loaded.") + _id) {
 		_data = data;
+		emit loaded();
+	}
 }
