@@ -19,6 +19,9 @@ Utils for easy c++ and qml integration of common android features
 	- Provides `FileDialog` qml type that provides a file dialog for all platforms
 		- On Android, uses the FileChooser
 		- On other Platforms, the [Qt labs FileDialog](https://doc.qt.io/qt-5/qml-qt-labs-platform-filedialog.html) is used
+- Adds the `SharedPreferences` class
+	- Allows easy C++ access to Android shared preferences
+	- Notifies of changes in the preferences
 
 ## Installation
 The package is providet as qpm package, [`de.skycoder42.androidutils`](https://www.qpm.io/packages/de.skycoder42.androidutils/index.html). To install:
