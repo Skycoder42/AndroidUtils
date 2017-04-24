@@ -98,8 +98,8 @@ static void setupUtils()
 	AndroidNative::SystemDispatcher::instance()->loadClass("androidnative.Toast");
 	AndroidNative::SystemDispatcher::instance()->loadClass("de.skycoder42.androidutils.AndroidUtils");
 
-	qmlRegisterSingletonType<AndroidUtils>("de.skycoder42.androidutils", 1, 0, "AndroidUtils", createQmlSingleton);
-	qmlRegisterType<FileChooser>("de.skycoder42.androidutils", 1, 0, "FileChooser");
+	qmlRegisterSingletonType<AndroidUtils>("de.skycoder42.androidutils", 1, 1, "AndroidUtils", createQmlSingleton);
+	qmlRegisterType<FileChooser>("de.skycoder42.androidutils", 1, 1, "FileChooser");
 	//qmlProtectModule("de.skycoder42.quickextras", 1);
 }
 

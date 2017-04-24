@@ -2,20 +2,20 @@
   "name": "de.skycoder42.androidutils",
   "description": "Utils for easy c++ and qml integration of common android features",
   "author": {
-    "name": "Skycoder",
-    "email": "skycoder42.de@gmx.de"
+	"name": "Skycoder",
+	"email": "skycoder42.de@gmx.de"
   },
   "repository": {
-    "type": "GITHUB",
-    "url": "https://github.com/Skycoder42/AndroidUtils.git"
+	"type": "GITHUB",
+	"url": "https://github.com/Skycoder42/AndroidUtils.git"
   },
   "version": {
-    "label": "1.1.0",
-    "revision": "",
-    "fingerprint": ""
+	"label": "1.1.1",
+	"revision": "",
+	"fingerprint": ""
   },
   "dependencies": [
-    "android.native.pri@0.0.4"
+	"android.native.pri@0.0.4"
   ],
   "license": "BSD_3_CLAUSE",
   "pri_filename": "de_skycoder42_androidutils.pri",

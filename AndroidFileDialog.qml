@@ -1,7 +1,7 @@
 import QtQuick 2.8
 import QtQuick.Window 2.2
 import Qt.labs.platform 1.0
-import de.skycoder42.androidutils 1.0
+import de.skycoder42.androidutils 1.1
 
 FileChooser {
 	id: fileDialog

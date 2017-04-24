@@ -1,5 +1,5 @@
 import Qt.labs.platform 1.0
-import de.skycoder42.androidutils 1.0
+import de.skycoder42.androidutils 1.1
 
 FileDialog {
 	id: fileDialog

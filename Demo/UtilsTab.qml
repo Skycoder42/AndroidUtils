@@ -1,7 +1,7 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
-import de.skycoder42.androidutils 1.0
+import de.skycoder42.androidutils 1.1
 
 Pane {
 	ColumnLayout {
