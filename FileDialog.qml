@@ -1,43 +1,17 @@
-import Qt.labs.platform 1.0
+import Qt.labs.platform 1.0 as Labs
 import de.skycoder42.androidutils 1.1
 
-FileDialog {
+Labs.FileDialog {
 	id: fileDialog
 
-	property bool linkFileMode: true
+	property alias labsDialog: fileDialog
+	property var fileChooser: null
 
-	property alias contentUrl: fileDialog.file
-	property int type: FileChooser.OpenDocument
-	property string mimeType: "*/*"
+	property bool saveFile: false
+	property alias dialogFlags: fileDialog.options
 	property int chooserFlags: FileChooser.OpenableFlag
+	property string mimeType: "*/*"
 
-	onTypeChanged: {
-		if(!linkFileMode)
-			return;
-
-		switch(type) {
-		case FileChooser.GetContent:
-		case FileChooser.OpenDocument:
-			fileMode = FileDialog.OpenFile;
-			break;
-		case FileChooser.CreateDocument:
-			fileMode = FileDialog.SaveFile
-			break;
-		}
-	}
-
-	onFileModeChanged: {
-		if(!linkFileMode)
-			return;
-
-		switch(fileMode) {
-		case FileDialog.OpenFile:
-		case FileDialog.OpenFiles:
-			fileMode = FileChooser.OpenDocument;
-			break;
-		case FileDialog.SaveFile:
-			fileMode = FileChooser.CreateDocument;
-			break;
-		}
-	}
+	fileMode: saveFile ? Labs.FileDialog.SaveFile : Labs.FileDialog.OpenFile
+	modality: Qt.WindowModal
 }

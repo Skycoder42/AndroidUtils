@@ -6,63 +6,16 @@ import de.skycoder42.androidutils 1.1
 FileChooser {
 	id: fileDialog
 
-	property bool linkFileMode: true
+	property var labsDialog: null
+	property alias fileChooser: fileDialog
 
-	default property var data
-	property int flags: Qt.Dialog
-	property int modality: Qt.NonModal
-	property Window parentWindow: null
-	property int result: Dialog.Rejected
-	property bool visible: false
-	property string acceptLabel
-	property string rejectLabel
-	property alias currentFile: fileDialog.contentUrl
-	property var currentFiles: [currentFile]
+	property bool saveFile: false
+	property int dialogFlags: 0
 	property string defaultSuffix
+	property string folder
 	property alias file: fileDialog.contentUrl
-	property int fileMode: FileDialog.OpenFile
-	property var files: [file]
-	property alias folder: fileDialog.contentUrl
 	property var nameFilters
-	property int options
 
-	onAccepted: result = Dialog.Accepted
-	onRejected: result = Dialog.Rejected
-
-	function accept() {}
-	function reject() {}
-	function close() {}
-	function done(result) {
-		fileDialog.result = result;
-	}
-
-	onTypeChanged: {
-		if(!linkFileMode)
-			return;
-
-		switch(type) {
-		case FileChooser.GetContent:
-		case FileChooser.OpenDocument:
-			fileMode = FileDialog.OpenFile;
-			break;
-		case FileChooser.CreateDocument:
-			fileMode = FileDialog.SaveFile
-			break;
-		}
-	}
-
-	onFileModeChanged: {
-		if(!linkFileMode)
-			return;
-
-		switch(fileMode) {
-		case FileDialog.OpenFile:
-		case FileDialog.OpenFiles:
-			fileMode = FileChooser.OpenDocument;
-			break;
-		case FileDialog.SaveFile:
-			fileMode = FileChooser.CreateDocument;
-			break;
-		}
-	}
+	type: saveFile ? FileChooser.CreateDocument : FileChooser.OpenDocument
+	contentUrl: folder + "file" + defaultSuffix
 }

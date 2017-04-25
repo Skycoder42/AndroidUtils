@@ -6,11 +6,11 @@ import de.skycoder42.androidutils.demo 1.0
 
 Pane {
 	FileDialog {
-		id: chooser
+		id: fileDialog
 
-		type: modeBox.model.get(modeBox.currentIndex).value
+		saveFile: openBox.checked
 
-		onAccepted: AndroidUtils.showToast("File choosen: " + chooser.contentUrl, true)
+		onAccepted: AndroidUtils.showToast("File choosen: " + fileDialog.file, true)
 		onRejected: AndroidUtils.showToast("file choosing aborted!")
 	}
 
@@ -26,35 +26,24 @@ Pane {
 
 		TextField {
 			id: contentField
-			text: chooser.contentUrl
+			text: fileDialog.file
 
 			Layout.fillWidth: true
-			Layout.columnSpan: 3
+			Layout.columnSpan: 2
 
 			onEditingFinished: chooser.contentUrl = contentField.text
 		}
 
-		ComboBox {
-			id: modeBox
-			textRole: "key"
-
-			Layout.fillWidth: true
-			Layout.columnSpan: 3
-
-			model: ListModel {
-				ListElement { key: "GetContent"; value: FileChooser.GetContent }
-				ListElement { key: "OpenDocument"; value: FileChooser.OpenDocument }
-				ListElement { key: "CreateDocument"; value: FileChooser.CreateDocument }
-			}
-
-			currentIndex: 1
+		CheckBox {
+			id: openBox
+			text: "Get save file"
 		}
 
 		Button {
 			id: chooserButton
 			Layout.fillWidth: true
 			text: "Open file chooser"
-			onClicked: chooser.open()
+			onClicked: fileDialog.open()
 		}
 
 		Button {
@@ -62,7 +51,7 @@ Pane {
 			Layout.fillWidth: true
 			text: "Display/Edit File"
 
-			onClicked: opener.openFile(chooser.contentUrl)
+			onClicked: opener.openFile(fileDialog.file)
 		}
 
 		Button {
@@ -70,7 +59,7 @@ Pane {
 			Layout.fillWidth: true
 			text: "Save File"
 
-			onClicked: opener.saveFile(chooser.contentUrl, editField.text)
+			onClicked: opener.saveFile(fileDialog.file, editField.text)
 		}
 
 		TextArea {
