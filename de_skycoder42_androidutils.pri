@@ -22,8 +22,8 @@ DISTFILES += \
 	$$PWD/android/src/de/skycoder42/androidutils/FileChooser.java \
     $$PWD/android/src/de/skycoder42/androidutils/PrefHelper.java
 
-QPM_TRANSLATIONS += androidutils_de.ts \
-	androidutils_template.ts
+QPM_TRANSLATIONS += $$PWD/androidutils_de.ts \
+	$$PWD/androidutils_template.ts
 
 android {
 	HEADERS += $$PWD/contentdevice.h
