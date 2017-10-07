@@ -1,3 +1,5 @@
+QT += qml quick
+
 HEADERS += \
 	$$PWD/androidutils.h \
 	$$PWD/filechooser.h \
