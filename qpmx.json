@@ -1,0 +1,33 @@
+{
+    "dependencies": [
+        {
+            "package": "android.native.pri",
+            "provider": "qpm",
+            "version": "0.0.5"
+        }
+    ],
+    "license": {
+        "file": "LICENSE",
+        "name": "BSD_3_CLAUSE"
+    },
+    "prcFile": "de_skycoder42_androidutils.prc",
+    "priFile": "de_skycoder42_androidutils.pri",
+    "priIncludes": [
+    ],
+    "publishers": {
+        "qpm": {
+            "author": {
+                "email": "skycoder42.de@gmx.de",
+                "name": "Skycoder"
+            },
+            "description": "Utils for easy c++ and qml integration of common android features",
+            "name": "de.skycoder42.androidutils",
+            "repository": {
+                "type": "GITHUB",
+                "url": "https://github.com/Skycoder42/AndroidUtils.git"
+            },
+            "webpage": "https://github.com/Skycoder42/AndroidUtils"
+        }
+    },
+    "source": false
+}

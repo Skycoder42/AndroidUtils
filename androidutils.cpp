@@ -10,15 +10,6 @@
 #endif
 #include "filechooser.h"
 
-#if defined(Q_OS_ANDROID) && !defined(NO_JNI_ONLOAD)
-JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void*) {
-	Q_UNUSED(vm);
-	// It must call this function within JNI_OnLoad to enable System Dispatcher
-	AndroidNative::SystemDispatcher::registerNatives();
-	return JNI_VERSION_1_6;
-}
-#endif
-
 static void setupUtils();
 static QObject *createQmlSingleton(QQmlEngine *qmlEngine, QJSEngine *jsEngine);
 
