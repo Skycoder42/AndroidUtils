@@ -1,7 +1,7 @@
 #include "sharedpreferences.h"
 
 #include <QUuid>
-#include <AndroidNative/systemdispatcher.h>
+#include <systemdispatcher.h>
 
 SharedPreferences::SharedPreferences(const QString &id, QObject *parent) :
 	QObject(parent),

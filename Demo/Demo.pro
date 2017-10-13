@@ -4,13 +4,11 @@ CONFIG += c++11
 
 TARGET = AndroidUtilsDemo
 
-include(../vendor/vendor.pri)
-QPM_ROOT = $$_PRO_FILE_PWD_/../vendor
 include(../de_skycoder42_androidutils.pri)
 
 SOURCES += main.cpp \
 	opener.cpp \
-    prefmodel.cpp
+	prefmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -45,4 +43,7 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 HEADERS += \
 	opener.h \
-    prefmodel.h
+	prefmodel.h
+
+!ReleaseBuild:!DebugBuild:!system(qpmx -d $$shell_quote($$_PRO_FILE_PWD_/..) --qmake-run init $$QPMX_EXTRA_OPTIONS $$shell_quote($$QMAKE_QMAKE) $$shell_quote($$OUT_PWD)): error(qpmx initialization failed. Check the compilation log for details.)
+else: include($$OUT_PWD/qpmx_generated.pri)

@@ -2,7 +2,7 @@
 #include <QtGlobal>
 #include <QQmlEngine>
 #include <QCoreApplication>
-#include <AndroidNative/systemdispatcher.h>
+#include <systemdispatcher.h>
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras>
 #else

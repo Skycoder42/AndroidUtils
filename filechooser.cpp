@@ -1,5 +1,5 @@
 #include "filechooser.h"
-#include <AndroidNative/systemdispatcher.h>
+#include <systemdispatcher.h>
 
 const QString FileChooser::ContentChoosenMessage = QStringLiteral("AndroidUtils.FileChooser.contentChoosen");
 
